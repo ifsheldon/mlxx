@@ -4,6 +4,10 @@
 
 ## Usage
 
+Installation:
+* `pip install mlxx`
+* `uv add mlxx`
+
 After importing `mlx`, do this
 
 ```python

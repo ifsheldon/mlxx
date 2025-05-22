@@ -389,5 +389,152 @@ if not hasattr(mx.array, "stop_gradient"):
 
 # some convenient methods inspired by PyTorch
 
+def _array_flatten(self):
+    """
+    Returns a flattened (1D) view of the array.
+    """
+    return mx.reshape(self, (-1,))
+
+if not hasattr(mx.array, "flatten"):
+    mx.array.flatten = _array_flatten
+
+def _array_permute(self, *dims):
+    """
+    Returns an array with axes permuted in the given order.
+    Equivalent to numpy.transpose with the axes argument.
+
+    Args:
+        *dims: The desired ordering of dimensions.
+
+    Returns:
+        Permuted array.
+    """
+    if len(dims) == 1 and isinstance(dims[0], (tuple, list)):
+        dims = dims[0]
+    return mx.transpose(self, axes=dims)
+
 if not hasattr(mx.array, "permute"):
-    mx.array.permute = mx.array.transpose
+    mx.array.permute = _array_permute
+
+def _array_transpose(self, dim0=None, dim1=None):
+    """
+    If two dims are given, swaps the two axes.
+    If no dims are given, reverses the order of the axes.
+    """
+    if dim0 is None and dim1 is None:
+        axes = tuple(reversed(range(self.ndim)))
+        return mx.transpose(self, axes=axes)
+    elif dim0 is not None and dim1 is not None:
+        axes = list(range(self.ndim))
+        axes[dim0], axes[dim1] = axes[dim1], axes[dim0]
+        return mx.transpose(self, axes=axes)
+    else:
+        raise ValueError("transpose() must take 0 or 2 arguments.")
+
+if not hasattr(mx.array, "transpose"):
+    mx.array.transpose = _array_transpose
+
+def _array_item(self):
+    """
+    Extracts a Python scalar from a 0-dim array.
+    """
+    if self.shape == () or self.size == 1:
+        # Try to convert to Python scalar via numpy
+        return self.__array__().item()
+    raise ValueError("Can only convert an array of size 1 to a Python scalar")
+
+if not hasattr(mx.array, "item"):
+    mx.array.item = _array_item
+
+def _array_clone(self):
+    """
+    Returns a deep copy of the array.
+    """
+    return mx.array(self)
+
+if not hasattr(mx.array, "clone"):
+    mx.array.clone = _array_clone
+
+def _array_fill_(self, value):
+    """
+    Returns a new array with the same shape as self, filled with the scalar value.
+    Note: In-place operation is not supported in MLX, so this returns a new array.
+    """
+    return mx.full_like(self, value)
+
+if not hasattr(mx.array, "fill_"):
+    mx.array.fill_ = _array_fill_
+
+def _array_unique(self):
+    """
+    Returns the unique values in the array, sorted.
+    """
+    return mx.unique(self)
+
+if not hasattr(mx.array, "unique"):
+    mx.array.unique = _array_unique
+
+def _array_argmin(self, axis=None):
+    """
+    Returns the indices of the minimum value along an axis.
+    """
+    return mx.argmin(self, axis=axis)
+
+if not hasattr(mx.array, "argmin"):
+    mx.array.argmin = _array_argmin
+
+def _array_argmax(self, axis=None):
+    """
+    Returns the indices of the maximum value along an axis.
+    """
+    return mx.argmax(self, axis=axis)
+
+if not hasattr(mx.array, "argmax"):
+    mx.array.argmax = _array_argmax
+
+def _array_index_select(self, axis, index):
+    """
+    Selects elements along a given axis using an index array (like numpy.take).
+
+    Args:
+        axis: Axis along which to select.
+        index: Indices of elements to select (1-D array or list).
+
+    Returns:
+        Selected array.
+    """
+    return mx.take(self, index, axis=axis)
+
+if not hasattr(mx.array, "index_select"):
+    mx.array.index_select = _array_index_select
+
+def _array_masked_select(self, mask):
+    """
+    Returns elements where a boolean mask is True.
+
+    Args:
+        mask: Boolean array of the same shape as self.
+
+    Returns:
+        1D array of selected elements.
+    """
+    return self[mask]
+
+if not hasattr(mx.array, "masked_select"):
+    mx.array.masked_select = _array_masked_select
+
+def _array_gather(self, axis, index):
+    """
+    Gathers values along a given axis according to indices (like numpy.take_along_axis).
+
+    Args:
+        axis: Axis along which to gather.
+        index: Indices to gather, must be broadcastable to self.shape.
+
+    Returns:
+        Gathered array.
+    """
+    return mx.take_along_axis(self, index, axis=axis)
+
+if not hasattr(mx.array, "gather"):
+    mx.array.gather = _array_gather

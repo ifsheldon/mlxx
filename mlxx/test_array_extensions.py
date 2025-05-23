@@ -100,3 +100,24 @@ def test_mlx_array_clone_value_equality_and_independence(data):
         clone_plus = clone + 1
         assert not mx.array_equal(mlx_arr, clone_plus)
         assert mx.array_equal(mlx_arr, mx.array(data))  # Original unchanged
+
+@pytest.mark.parametrize(
+    "data, new_shape",
+    [
+        ([1, 2, 3, 4], (2, 2)),
+        ([[1, 2], [3, 4]], (4,)),
+        ([[[1], [2]], [[3], [4]]], (2, 2)),
+        ([0.0, 1.0, 2.0, 3.0], (2, 2)),
+    ],
+)
+def test_mlx_array_reshape_matches_numpy_and_mxreshape(data, new_shape):
+    mlx_arr = mx.array(data)
+    np_arr = np.array(data)
+    # MLX monkey-patched
+    mlx_reshaped = mlx_arr.reshape(new_shape)
+    # MLX functional
+    mx_reshaped = mx.reshape(mlx_arr, new_shape)
+    # NumPy
+    np_reshaped = np_arr.reshape(new_shape)
+    assert mlx_reshaped.tolist() == np_reshaped.tolist() == mx_reshaped.tolist()
+    assert mlx_reshaped.shape == np_reshaped.shape == mx_reshaped.shape

@@ -442,3 +442,12 @@ def _array_clone(self, stream=None):
 
 if not hasattr(mx.array, "clone"):
     mx.array.clone = _array_clone
+
+def _array_reshape(self, shape, stream=None):
+    """
+    Internal wrapper for mx.reshape.
+    """
+    return mx.reshape(self, shape, stream=stream)
+
+if not hasattr(mx.array, "reshape"):
+    mx.array.reshape = _array_reshape

@@ -478,3 +478,12 @@ def _array_eq(self, other):
 
 if not hasattr(mx.array, "eq"):
     mx.array.eq = _array_eq
+
+def _array_ne(self, other):
+    """
+    Elementwise not-equal with another array or scalar.
+    """
+    return mx.not_equal(self, other)
+
+if not hasattr(mx.array, "ne"):
+    mx.array.ne = _array_ne

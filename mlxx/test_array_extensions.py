@@ -184,3 +184,28 @@ def test_mlx_array_eq_matches_numpy_and_mxequal(data, other):
     np_eq = np.equal(np_arr, np_other)
     assert eq_res.tolist() == np_eq.tolist() == mx_eq.tolist()
     assert eq_res.shape == np_eq.shape == mx_eq.shape
+
+@pytest.mark.parametrize(
+    "data, other",
+    [
+        ([1, 2, 3], [1, 0, 3]),
+        ([[1, 2], [3, 4]], [[1, 0], [3, 5]]),
+        ([0, 0, 0], [0, 1, 0]),
+        ([[1, 2], [3, 4]], 3),
+        ([1, 2, 3], 2),
+        (42, 43),
+    ]
+)
+def test_mlx_array_ne_matches_numpy_and_mxnotequal(data, other):
+    mlx_arr = mx.array(data)
+    mlx_other = mx.array(other)
+    np_arr = np.array(data)
+    np_other = np.array(other)
+    # MLX monkey-patched
+    ne_res = mlx_arr.ne(mlx_other)
+    # MLX not_equal
+    mx_ne = mx.not_equal(mlx_arr, mlx_other)
+    # NumPy
+    np_ne = np.not_equal(np_arr, np_other)
+    assert ne_res.tolist() == np_ne.tolist() == mx_ne.tolist()
+    assert ne_res.shape == np_ne.shape == mx_ne.shape

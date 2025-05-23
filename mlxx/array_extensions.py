@@ -424,3 +424,12 @@ def _array_prod(self, axis=None, keepdims=False, stream=None):
 
 if not hasattr(mx.array, "prod"):
     mx.array.prod = _array_prod
+
+def _array_any(self, axis=None, keepdims=False, stream=None):
+    """
+    Internal wrapper for mx.any.
+    """
+    return mx.any(self, axis=axis, keepdims=keepdims, stream=stream)
+
+if not hasattr(mx.array, "any"):
+    mx.array.any = _array_any

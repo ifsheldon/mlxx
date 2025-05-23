@@ -53,3 +53,30 @@ def test_mlx_array_prod_matches_numpy_and_mxprod(data):
         np_axis1 = np.prod(np_arr, axis=-1)
         mx_axis1 = mx.prod(mlx_arr, axis=-1)
         assert mlx_axis1.tolist() == np_axis1.tolist() == mx_axis1.tolist()
+
+@pytest.mark.parametrize("data", [
+    [0, 0, 0],
+    [0, 1, 0],
+    [[0, 0], [0, 1]],
+    [[True, False], [False, False]],
+    [[0, 0], [0, 0]],
+    [[], []],
+    [[0.0, 0.0], [0.0, 0.0]],
+])
+def test_mlx_array_any_matches_numpy_and_mxany(data):
+    mlx_arr = mx.array(data)
+    np_arr = np.array(data)
+    # Default: full any (scalar)
+    assert bool(mlx_arr.any().item()) == bool(np.any(np_arr)) == bool(mx.any(mlx_arr).item())
+    # Test axis=0 if possible
+    if np_arr.ndim > 0 and np_arr.size > 0:
+        mlx_axis0 = mlx_arr.any(axis=0)
+        np_axis0 = np.any(np_arr, axis=0)
+        mx_axis0 = mx.any(mlx_arr, axis=0)
+        assert mlx_axis0.tolist() == np_axis0.tolist() == mx_axis0.tolist()
+    # Test axis=-1 if possible and >1D
+    if np_arr.ndim > 1 and np_arr.size > 0:
+        mlx_axis1 = mlx_arr.any(axis=-1)
+        np_axis1 = np.any(np_arr, axis=-1)
+        mx_axis1 = mx.any(mlx_arr, axis=-1)
+        assert mlx_axis1.tolist() == np_axis1.tolist() == mx_axis1.tolist()

@@ -23,6 +23,8 @@ a = mx.array([1, 2, 3], dtype=mx.float32)
 b = mx.array([1, 2, 3], dtype=mx.float32)
 print(a.allclose(b))
 print(a.inner(b))
+c = mx.array([4,5,6])
+print(a.add(c))
 ```
 
 ## Available Convenient Methods
@@ -39,10 +41,15 @@ print(a.inner(b))
 - `logical_not()`: Element-wise logical NOT
 
 ### Binary Operations
-- `binary_maximum(b)`: Element-wise maximum
-- `binary_minimum(b)`: Element-wise minimum
+- `add(other)`: Element-wise addition
+- `divide(other)` (alias: `div`): Element-wise division
+- `multiply(other)` (alias: `mul`): Element-wise multiplication
+- `logaddexp(other)`: Element-wise log(exp(a) + exp(b))
+- `binary_maximum(b)`: Element-wise maximum of self and b.
+- `binary_minimum(b)`: Element-wise minimum of self and b.
 - `power(exponent)`: Element-wise power
 - `matmul(b)`: Matrix multiplication
+- `addmm(mat1, mat2, beta=1.0, alpha=1.0)`: Computes `beta * self + alpha * (mat1 @ mat2)`.
 - `inner(b)`: Inner product
 
 ### Trigonometric Functions
@@ -57,6 +64,9 @@ print(a.inner(b))
 - `tan()`: Tangent
 - `tanh()`: Hyperbolic tangent
 
+### Reduction Operations
+- `nansum(axis=None, keepdims=False, dtype=None)`: Sum of array elements, treating NaNs as zero.
+
 ### Mathematical Functions
 - `ceil()`: Ceiling function
 - `floor()`: Floor function
@@ -69,8 +79,8 @@ print(a.inner(b))
 - `sign()`: Sign function
 
 ### Complex Number Operations
-- `imag()`: Imaginary part
-- `real()`: Real part
+- `imag()`: Imaginary part (returns 0 for real arrays)
+- `real()`: Real part (returns self for real arrays)
 
 ### Infinity and NaN Checks
 - `isfinite()`: Check for finite values
@@ -82,9 +92,9 @@ print(a.inner(b))
 ### Other Operations
 - `negative()`: Element-wise negation
 - `stop_gradient()`: Stop gradient computation
-- `permute()`: Alias for transpose
+- `permute(*axes)`: Permute axes (alias for transpose)
 
-Note: All methods support an optional `stream` parameter for controlling computation streams.
+Note: All methods support an optional `stream` parameter for controlling computation streams where applicable.
 
 ## Contributing
 

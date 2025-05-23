@@ -408,3 +408,10 @@ if not hasattr(mx.array, "stop_gradient"):
 
 if not hasattr(mx.array, "permute"):
     mx.array.permute = mx.array.transpose
+
+def _array_abs(self, stream=None):
+    """Internal wrapper for mx.abs."""
+    return mx.abs(self, stream=stream)
+
+if not hasattr(mx.array, "abs"):
+    mx.array.abs = _array_abs

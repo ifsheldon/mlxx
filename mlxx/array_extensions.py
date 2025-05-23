@@ -433,3 +433,12 @@ def _array_any(self, axis=None, keepdims=False, stream=None):
 
 if not hasattr(mx.array, "any"):
     mx.array.any = _array_any
+
+def _array_clone(self, stream=None):
+    """
+    Returns a copy of the array (deep copy).
+    """
+    return mx.array(self, stream=stream)
+
+if not hasattr(mx.array, "clone"):
+    mx.array.clone = _array_clone

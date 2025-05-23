@@ -80,3 +80,23 @@ def test_mlx_array_any_matches_numpy_and_mxany(data):
         np_axis1 = np.any(np_arr, axis=-1)
         mx_axis1 = mx.any(mlx_arr, axis=-1)
         assert mlx_axis1.tolist() == np_axis1.tolist() == mx_axis1.tolist()
+
+@pytest.mark.parametrize("data", [
+    [1, 2, 3],
+    [[2, 3], [4, 5]],
+    [[-1, 0], [0, 1]],
+    [0.5, 2.0, 4.0],
+])
+def test_mlx_array_clone_value_equality_and_independence(data):
+    mlx_arr = mx.array(data)
+    clone = mlx_arr.clone()
+    # Value equality
+    assert mx.array_equal(mlx_arr, clone)
+    # Not the same object
+    assert clone is not mlx_arr
+    # Changing clone does not change original (where possible)
+    if mlx_arr.size > 0:
+        # Add 1 to all elements in clone, original should not change
+        clone_plus = clone + 1
+        assert not mx.array_equal(mlx_arr, clone_plus)
+        assert mx.array_equal(mlx_arr, mx.array(data))  # Original unchanged

@@ -514,3 +514,12 @@ def _array_ge(self, other):
 
 if not hasattr(mx.array, "ge"):
     mx.array.ge = _array_ge
+
+def _array_le(self, other):
+    """
+    Elementwise less-than-or-equal with another array or scalar.
+    """
+    return mx.less_equal(self, other)
+
+if not hasattr(mx.array, "le"):
+    mx.array.le = _array_le

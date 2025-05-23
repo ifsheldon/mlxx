@@ -284,3 +284,28 @@ def test_mlx_array_ge_matches_numpy_and_mxgreaterequal(data, other):
     np_ge = np.greater_equal(np_arr, np_other)
     assert ge_res.tolist() == np_ge.tolist() == mx_ge.tolist()
     assert ge_res.shape == np_ge.shape == mx_ge.shape
+
+@pytest.mark.parametrize(
+    "data, other",
+    [
+        ([1, 2, 3], [1, 0, 3]),
+        ([[1, 2], [3, 4]], [[1, 0], [3, 5]]),
+        ([0, 0, 0], [0, 1, 0]),
+        ([[1, 2], [3, 4]], 3),
+        ([1, 2, 3], 2),
+        (42, 43),
+    ]
+)
+def test_mlx_array_le_matches_numpy_and_mxlessequal(data, other):
+    mlx_arr = mx.array(data)
+    mlx_other = mx.array(other)
+    np_arr = np.array(data)
+    np_other = np.array(other)
+    # MLX monkey-patched
+    le_res = mlx_arr.le(mlx_other)
+    # MLX less_equal
+    mx_le = mx.less_equal(mlx_arr, mlx_other)
+    # NumPy
+    np_le = np.less_equal(np_arr, np_other)
+    assert le_res.tolist() == np_le.tolist() == mx_le.tolist()
+    assert le_res.shape == np_le.shape == mx_le.shape

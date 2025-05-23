@@ -460,3 +460,12 @@ def _array_view(self, *args, **kwargs):
 
 if not hasattr(mx.array, "view"):
     mx.array.view = _array_view
+
+def _array_unsqueeze(self, axis):
+    """
+    Insert a new axis at the specified position.
+    """
+    return mx.expand_dims(self, axis)
+
+if not hasattr(mx.array, "unsqueeze"):
+    mx.array.unsqueeze = _array_unsqueeze

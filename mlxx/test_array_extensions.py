@@ -137,3 +137,25 @@ def test_mlx_array_view_matches_reshape(data, new_shape):
     viewed = mlx_arr.view(new_shape)
     assert viewed.tolist() == reshaped.tolist()
     assert viewed.shape == reshaped.shape
+
+@pytest.mark.parametrize(
+    "data, axis",
+    [
+        ([1, 2, 3], 0),
+        ([1, 2, 3], 1),
+        ([[1, 2], [3, 4]], 0),
+        ([[1, 2], [3, 4]], 1),
+        ([[1, 2], [3, 4]], 2),
+    ]
+)
+def test_mlx_array_unsqueeze_matches_numpy_and_mxexpand_dims(data, axis):
+    mlx_arr = mx.array(data)
+    np_arr = np.array(data)
+    # MLX monkey-patched
+    unsq = mlx_arr.unsqueeze(axis)
+    # MLX expand_dims
+    mx_unsq = mx.expand_dims(mlx_arr, axis)
+    # NumPy expand_dims
+    np_unsq = np.expand_dims(np_arr, axis)
+    assert unsq.tolist() == np_unsq.tolist() == mx_unsq.tolist()
+    assert unsq.shape == np_unsq.shape == mx_unsq.shape

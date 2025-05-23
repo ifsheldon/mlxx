@@ -505,3 +505,12 @@ def _array_lt(self, other):
 
 if not hasattr(mx.array, "lt"):
     mx.array.lt = _array_lt
+
+def _array_ge(self, other):
+    """
+    Elementwise greater-than-or-equal with another array or scalar.
+    """
+    return mx.greater_equal(self, other)
+
+if not hasattr(mx.array, "ge"):
+    mx.array.ge = _array_ge

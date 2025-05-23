@@ -523,3 +523,23 @@ def _array_le(self, other):
 
 if not hasattr(mx.array, "le"):
     mx.array.le = _array_le
+
+def _array_t(self):
+    """
+    2D transpose (like .T in NumPy, but method).
+    """
+    if len(self.shape) != 2:
+        raise ValueError("t is only defined for 2D arrays.")
+    return mx.transpose(self)
+
+if not hasattr(mx.array, "t"):
+    mx.array.t = _array_t
+
+def _array_type(self, dtype):
+    """
+    Alias for astype.
+    """
+    return self.astype(dtype)
+
+if not hasattr(mx.array, "type"):
+    mx.array.type = _array_type

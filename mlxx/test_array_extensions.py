@@ -309,3 +309,43 @@ def test_mlx_array_le_matches_numpy_and_mxlessequal(data, other):
     np_le = np.less_equal(np_arr, np_other)
     assert le_res.tolist() == np_le.tolist() == mx_le.tolist()
     assert le_res.shape == np_le.shape == mx_le.shape
+
+@pytest.mark.parametrize(
+    "data",
+    [
+        [[1, 2], [3, 4]],
+        [[5.5, 6.5], [7.5, 8.5]],
+        [[0, -1], [2, -3]],
+    ]
+)
+def test_mlx_array_t_matches_numpy_and_mxtranspose(data):
+    mlx_arr = mx.array(data)
+    np_arr = np.array(data)
+    # MLX monkey-patched
+    t_res = mlx_arr.t()
+    # MLX
+    mx_t = mx.transpose(mlx_arr)
+    # NumPy
+    np_t = np_arr.transpose()
+    assert t_res.tolist() == np_t.tolist() == mx_t.tolist()
+    assert t_res.shape == np_t.shape == mx_t.shape
+
+@pytest.mark.parametrize(
+    "data,dtype",
+    [
+        ([1, 2, 3], "float32"),
+        ([[1, 2], [3, 4]], "int64"),
+        ([0.5, 1.5], "int32"),
+    ]
+)
+def test_mlx_array_type_matches_numpy_and_astype(data, dtype):
+    mlx_arr = mx.array(data)
+    np_arr = np.array(data)
+    # MLX monkey-patched
+    type_res = mlx_arr.type(dtype)
+    # MLX astype
+    astype_res = mlx_arr.astype(dtype)
+    # NumPy
+    np_type = np_arr.astype(dtype)
+    assert type_res.tolist() == np_type.tolist() == astype_res.tolist()
+    assert type_res.shape == np_type.shape == astype_res.shape

@@ -61,8 +61,16 @@ if not hasattr(mx.array, "logical_or"):
 def _array_logical_xor(self, b, stream=None):
     """
     Internal wrapper for mx.logical_xor.
+    Implements A XOR B as (A OR B) AND NOT (A AND B) if mx.logical_xor is not available.
     """
-    return mx.logical_xor(self, b, stream=stream)
+    if hasattr(mx, "logical_xor"):
+        return mx.logical_xor(self, b, stream=stream)
+    else:
+        # A XOR B = (A | B) & ~(A & B)
+        a_or_b = mx.logical_or(self, b, stream=stream)
+        a_and_b = mx.logical_and(self, b, stream=stream)
+        not_a_and_b = mx.logical_not(a_and_b, stream=stream)
+        return mx.logical_and(a_or_b, not_a_and_b, stream=stream)
 
 
 if not hasattr(mx.array, "logical_xor"):
@@ -280,8 +288,10 @@ if not hasattr(mx.array, "isnan"):
 
 
 def _array_isneginf(self, stream=None):
-    """Internal wrapper for mx.isneginf."""
-    return mx.isneginf(self, stream=stream)
+    if hasattr(mx, "isneginf"):
+        return mx.isneginf(self, stream=stream)
+    else:
+        return mx.logical_and(mx.isinf(self, stream=stream), self < 0, stream=stream)
 
 
 if not hasattr(mx.array, "isneginf"):
@@ -289,8 +299,10 @@ if not hasattr(mx.array, "isneginf"):
 
 
 def _array_isposinf(self, stream=None):
-    """Internal wrapper for mx.isposinf."""
-    return mx.isposinf(self, stream=stream)
+    if hasattr(mx, "isposinf"):
+        return mx.isposinf(self, stream=stream)
+    else:
+        return mx.logical_and(mx.isinf(self, stream=stream), self > 0, stream=stream)
 
 
 if not hasattr(mx.array, "isposinf"):
@@ -391,3 +403,87 @@ if not hasattr(mx.array, "stop_gradient"):
 
 if not hasattr(mx.array, "permute"):
     mx.array.permute = mx.array.transpose
+
+
+def _array_add(self, other, stream=None):
+    """Internal wrapper for mx.add."""
+    return mx.add(self, other, stream=stream)
+
+
+if not hasattr(mx.array, "add"):
+    mx.array.add = _array_add
+
+
+def _array_addmm(self, mat1, mat2, beta=1.0, alpha=1.0, stream=None):
+    """Internal wrapper for mx.addmm."""
+    return mx.addmm(self, mat1, mat2, beta=beta, alpha=alpha, stream=stream)
+
+
+if not hasattr(mx.array, "addmm"):
+    mx.array.addmm = _array_addmm
+
+
+def _array_logaddexp(self, other, stream=None):
+    """Internal wrapper for mx.logaddexp."""
+    return mx.logaddexp(self, other, stream=stream)
+
+
+if not hasattr(mx.array, "logaddexp"):
+    mx.array.logaddexp = _array_logaddexp
+
+
+def _array_multiply(self, other, stream=None):
+    """Internal wrapper for mx.multiply."""
+    return mx.multiply(self, other, stream=stream)
+
+
+if not hasattr(mx.array, "multiply"):
+    mx.array.multiply = _array_multiply
+
+
+if not hasattr(mx.array, "mul"):
+    mx.array.mul = _array_multiply  # alias
+
+
+def _array_nansum(self, axis=None, keepdims=False, dtype=None, stream=None):
+    """Mimics np.nansum and torch.nansum behavior for an array.
+    Treats NaNs as zero.
+    """
+    if self.dtype == mx.bool_:
+        # For boolean arrays, isnan is not directly applicable in the same way.
+        # nansum on a boolean array usually means sum of True values.
+        # If we need to handle potential NaNs that got into a bool array somehow (e.g. via view),
+        # this might need specific handling. Assuming typical bool array usage.
+        return mx.sum(self, axis=axis, keepdims=keepdims, stream=stream)
+
+    # Replace NaNs with zeros
+    # Ensure the 0.0 is of the same dtype as the array to avoid type promotion issues.
+    zeros = mx.array(0.0, dtype=self.dtype)
+    arr_without_nans = mx.where(
+        mx.isnan(self, stream=stream), zeros, self, stream=stream
+    )
+
+    # Sum the array with NaNs replaced by zeros
+    result = mx.sum(arr_without_nans, axis=axis, keepdims=keepdims, stream=stream)
+
+    # Cast to specified dtype if provided
+    if dtype is not None:
+        result = result.astype(dtype, stream=stream)
+
+    return result
+
+
+if not hasattr(mx.array, "nansum"):
+    mx.array.nansum = _array_nansum
+
+
+def _array_divide(self, other, stream=None):
+    """Internal wrapper for mx.divide."""
+    return mx.divide(self, other, stream=stream)
+
+
+if not hasattr(mx.array, "divide"):
+    mx.array.divide = _array_divide
+
+if not hasattr(mx.array, "div"):
+    mx.array.div = _array_divide  # alias

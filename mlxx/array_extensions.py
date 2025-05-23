@@ -469,3 +469,12 @@ def _array_unsqueeze(self, axis):
 
 if not hasattr(mx.array, "unsqueeze"):
     mx.array.unsqueeze = _array_unsqueeze
+
+def _array_eq(self, other):
+    """
+    Elementwise equality with another array or scalar.
+    """
+    return mx.equal(self, other)
+
+if not hasattr(mx.array, "eq"):
+    mx.array.eq = _array_eq

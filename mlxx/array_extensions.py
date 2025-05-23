@@ -1,5 +1,22 @@
 import mlx.core as mx
 
+def _array_tolist(self):
+    """
+    Recursively convert an MLX array to a (nested) Python list using MLX ops only.
+    """
+    # Scalar case
+    if self.shape == ():
+        return self.item()
+    # 1D
+    elif len(self.shape) == 1:
+        return [self[i].item() for i in range(self.shape[0])]
+    # ND
+    else:
+        return [mx.array(self[i]).tolist() for i in range(self.shape[0])]
+
+if not hasattr(mx.array, "tolist"):
+    mx.array.tolist = _array_tolist
+
 
 def _array_allclose(self, b, rtol=1e-05, atol=1e-08, equal_nan=False, stream=None):
     """
@@ -391,3 +408,138 @@ if not hasattr(mx.array, "stop_gradient"):
 
 if not hasattr(mx.array, "permute"):
     mx.array.permute = mx.array.transpose
+
+def _array_abs(self, stream=None):
+    """Internal wrapper for mx.abs."""
+    return mx.abs(self, stream=stream)
+
+if not hasattr(mx.array, "abs"):
+    mx.array.abs = _array_abs
+
+def _array_prod(self, axis=None, keepdims=False, stream=None):
+    """
+    Internal wrapper for mx.prod.
+    """
+    return mx.prod(self, axis=axis, keepdims=keepdims, stream=stream)
+
+if not hasattr(mx.array, "prod"):
+    mx.array.prod = _array_prod
+
+def _array_any(self, axis=None, keepdims=False, stream=None):
+    """
+    Internal wrapper for mx.any.
+    """
+    return mx.any(self, axis=axis, keepdims=keepdims, stream=stream)
+
+if not hasattr(mx.array, "any"):
+    mx.array.any = _array_any
+
+def _array_clone(self, stream=None):
+    """
+    Returns a copy of the array (deep copy).
+    """
+    return mx.array(self, stream=stream)
+
+if not hasattr(mx.array, "clone"):
+    mx.array.clone = _array_clone
+
+def _array_reshape(self, shape, stream=None):
+    """
+    Internal wrapper for mx.reshape.
+    """
+    return mx.reshape(self, shape, stream=stream)
+
+if not hasattr(mx.array, "reshape"):
+    mx.array.reshape = _array_reshape
+
+def _array_view(self, *args, **kwargs):
+    """
+    Alias for reshape.
+    """
+    return self.reshape(*args, **kwargs)
+
+if not hasattr(mx.array, "view"):
+    mx.array.view = _array_view
+
+def _array_unsqueeze(self, axis):
+    """
+    Insert a new axis at the specified position.
+    """
+    return mx.expand_dims(self, axis)
+
+if not hasattr(mx.array, "unsqueeze"):
+    mx.array.unsqueeze = _array_unsqueeze
+
+def _array_eq(self, other):
+    """
+    Elementwise equality with another array or scalar.
+    """
+    return mx.equal(self, other)
+
+if not hasattr(mx.array, "eq"):
+    mx.array.eq = _array_eq
+
+def _array_ne(self, other):
+    """
+    Elementwise not-equal with another array or scalar.
+    """
+    return mx.not_equal(self, other)
+
+if not hasattr(mx.array, "ne"):
+    mx.array.ne = _array_ne
+
+def _array_gt(self, other):
+    """
+    Elementwise greater-than with another array or scalar.
+    """
+    return mx.greater(self, other)
+
+if not hasattr(mx.array, "gt"):
+    mx.array.gt = _array_gt
+
+def _array_lt(self, other):
+    """
+    Elementwise less-than with another array or scalar.
+    """
+    return mx.less(self, other)
+
+if not hasattr(mx.array, "lt"):
+    mx.array.lt = _array_lt
+
+def _array_ge(self, other):
+    """
+    Elementwise greater-than-or-equal with another array or scalar.
+    """
+    return mx.greater_equal(self, other)
+
+if not hasattr(mx.array, "ge"):
+    mx.array.ge = _array_ge
+
+def _array_le(self, other):
+    """
+    Elementwise less-than-or-equal with another array or scalar.
+    """
+    return mx.less_equal(self, other)
+
+if not hasattr(mx.array, "le"):
+    mx.array.le = _array_le
+
+def _array_t(self):
+    """
+    2D transpose (like .T in NumPy, but method).
+    """
+    if len(self.shape) != 2:
+        raise ValueError("t is only defined for 2D arrays.")
+    return mx.transpose(self)
+
+if not hasattr(mx.array, "t"):
+    mx.array.t = _array_t
+
+def _array_type(self, dtype):
+    """
+    Alias for astype.
+    """
+    return self.astype(dtype)
+
+if not hasattr(mx.array, "type"):
+    mx.array.type = _array_type

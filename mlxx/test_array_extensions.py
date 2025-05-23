@@ -209,3 +209,28 @@ def test_mlx_array_ne_matches_numpy_and_mxnotequal(data, other):
     np_ne = np.not_equal(np_arr, np_other)
     assert ne_res.tolist() == np_ne.tolist() == mx_ne.tolist()
     assert ne_res.shape == np_ne.shape == mx_ne.shape
+
+@pytest.mark.parametrize(
+    "data, other",
+    [
+        ([1, 2, 3], [1, 0, 3]),
+        ([[1, 2], [3, 4]], [[1, 0], [3, 5]]),
+        ([0, 0, 0], [0, 1, 0]),
+        ([[1, 2], [3, 4]], 3),
+        ([1, 2, 3], 2),
+        (42, 41),
+    ]
+)
+def test_mlx_array_gt_matches_numpy_and_mxgreater(data, other):
+    mlx_arr = mx.array(data)
+    mlx_other = mx.array(other)
+    np_arr = np.array(data)
+    np_other = np.array(other)
+    # MLX monkey-patched
+    gt_res = mlx_arr.gt(mlx_other)
+    # MLX greater
+    mx_gt = mx.greater(mlx_arr, mlx_other)
+    # NumPy
+    np_gt = np.greater(np_arr, np_other)
+    assert gt_res.tolist() == np_gt.tolist() == mx_gt.tolist()
+    assert gt_res.shape == np_gt.shape == mx_gt.shape

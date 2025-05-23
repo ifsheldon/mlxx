@@ -487,3 +487,12 @@ def _array_ne(self, other):
 
 if not hasattr(mx.array, "ne"):
     mx.array.ne = _array_ne
+
+def _array_gt(self, other):
+    """
+    Elementwise greater-than with another array or scalar.
+    """
+    return mx.greater(self, other)
+
+if not hasattr(mx.array, "gt"):
+    mx.array.gt = _array_gt

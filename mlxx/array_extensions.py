@@ -496,3 +496,12 @@ def _array_gt(self, other):
 
 if not hasattr(mx.array, "gt"):
     mx.array.gt = _array_gt
+
+def _array_lt(self, other):
+    """
+    Elementwise less-than with another array or scalar.
+    """
+    return mx.less(self, other)
+
+if not hasattr(mx.array, "lt"):
+    mx.array.lt = _array_lt

@@ -121,3 +121,19 @@ def test_mlx_array_reshape_matches_numpy_and_mxreshape(data, new_shape):
     np_reshaped = np_arr.reshape(new_shape)
     assert mlx_reshaped.tolist() == np_reshaped.tolist() == mx_reshaped.tolist()
     assert mlx_reshaped.shape == np_reshaped.shape == mx_reshaped.shape
+
+@pytest.mark.parametrize(
+    "data, new_shape",
+    [
+        ([1, 2, 3, 4], (2, 2)),
+        ([[1, 2], [3, 4]], (4,)),
+        ([0, 1, 2, 3, 4, 5], (3, 2)),
+        ([7.0, 8.0, 9.0, 10.0], (2, 2)),
+    ]
+)
+def test_mlx_array_view_matches_reshape(data, new_shape):
+    mlx_arr = mx.array(data)
+    reshaped = mlx_arr.reshape(new_shape)
+    viewed = mlx_arr.view(new_shape)
+    assert viewed.tolist() == reshaped.tolist()
+    assert viewed.shape == reshaped.shape

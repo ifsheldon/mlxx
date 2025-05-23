@@ -451,3 +451,12 @@ def _array_reshape(self, shape, stream=None):
 
 if not hasattr(mx.array, "reshape"):
     mx.array.reshape = _array_reshape
+
+def _array_view(self, *args, **kwargs):
+    """
+    Alias for reshape.
+    """
+    return self.reshape(*args, **kwargs)
+
+if not hasattr(mx.array, "view"):
+    mx.array.view = _array_view

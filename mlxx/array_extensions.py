@@ -1,5 +1,22 @@
 import mlx.core as mx
 
+def _array_tolist(self):
+    """
+    Recursively convert an MLX array to a (nested) Python list using MLX ops only.
+    """
+    # Scalar case
+    if self.shape == ():
+        return self.item()
+    # 1D
+    elif len(self.shape) == 1:
+        return [self[i].item() for i in range(self.shape[0])]
+    # ND
+    else:
+        return [mx.array(self[i]).tolist() for i in range(self.shape[0])]
+
+if not hasattr(mx.array, "tolist"):
+    mx.array.tolist = _array_tolist
+
 
 def _array_allclose(self, b, rtol=1e-05, atol=1e-08, equal_nan=False, stream=None):
     """

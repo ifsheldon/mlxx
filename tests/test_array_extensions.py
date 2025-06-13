@@ -400,13 +400,6 @@ def test_logical_or():
     assert mx.array_equal(a.logical_or(b), expected)
 
 
-def test_logical_xor():
-    a = mx.array([True, True, False, False])
-    b = mx.array([True, False, True, False])
-    expected = mx.array([False, True, True, False])
-    assert mx.array_equal(a.logical_xor(b), expected)
-
-
 def test_logical_not():
     a = mx.array([True, False])
     expected = mx.array([False, True])
@@ -675,3 +668,7 @@ def test_permute():
         permuted_b_default, expected_transpose, "default permute (transpose) failed"
     )
     assert permuted_b_default.shape == (3, 2)
+
+    a = mx.random.normal((2, 3))
+    a = a.t()
+    assert a.shape == (3, 2)

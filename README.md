@@ -37,7 +37,6 @@ print(a.add(c))
 ### Logical Operations
 - `logical_and(b)`: Element-wise logical AND
 - `logical_or(b)`: Element-wise logical OR
-- `logical_xor(b)`: Element-wise logical XOR
 - `logical_not()`: Element-wise logical NOT
 
 ### Binary Operations
@@ -77,6 +76,7 @@ print(a.add(c))
 - `expm1()`: exp(x) - 1
 - `sigmoid()`: Sigmoid function
 - `sign()`: Sign function
+- `norm()`: Calculate norms, see `mlx.core.linalg.norm`
 
 ### Complex Number Operations
 - `imag()`: Imaginary part (returns 0 for real arrays)
@@ -93,6 +93,7 @@ print(a.add(c))
 - `negative()`: Element-wise negation
 - `stop_gradient()`: Stop gradient computation
 - `permute(*axes)`: Permute axes (alias for transpose)
+- `t()`: Transpose (alias for transpose)
 
 Note: All methods support an optional `stream` parameter for controlling computation streams where applicable.
 

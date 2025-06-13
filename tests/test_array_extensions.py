@@ -580,24 +580,6 @@ def test_erf_erfinv_expm1():
     )
 
 
-def test_imag_real():
-    # MLX doesn't have native complex numbers in the same way as NumPy/PyTorch for this test.
-    # However, these functions should still work on real numbers (imaginary part is 0, real part is the number itself).
-    a_real_mx = mx.array([1.0, -2.5, 3.0], dtype=mx.float32)
-
-    expected_imag = mx.zeros_like(a_real_mx)
-    assert mx.array_equal(a_real_mx.imag(), expected_imag)
-
-    expected_real = a_real_mx
-    assert mx.array_equal(a_real_mx.real(), expected_real)
-
-    # If MLX were to support complex dtypes, tests would be like:
-    # a_complex_np = np.array([1+2j, 3-4j], dtype=np.complex64)
-    # a_complex_mx = mx.array(a_complex_np) # This constructor would need to support complex
-    # assert_mx_equal_np(a_complex_mx.imag(), a_complex_np.imag)
-    # assert_mx_equal_np(a_complex_mx.real(), a_complex_np.real)
-
-
 def test_is_conditions():
     a_np = np.array([1.0, np.nan, np.inf, -np.inf, 0.0], dtype=np.float32)
     a_mx = mx.array(a_np)

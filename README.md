@@ -78,10 +78,6 @@ print(a.add(c))
 - `sign()`: Sign function
 - `norm()`: Calculate norms, see `mlx.core.linalg.norm`
 
-### Complex Number Operations
-- `imag()`: Imaginary part (returns 0 for real arrays)
-- `real()`: Real part (returns self for real arrays)
-
 ### Infinity and NaN Checks
 - `isfinite()`: Check for finite values
 - `isinf()`: Check for infinite values

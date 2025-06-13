@@ -230,15 +230,6 @@ if not hasattr(mx.array, "floor"):
     mx.array.floor = _array_floor
 
 
-def _array_imag(self, *args, **kwargs):
-    """Internal wrapper for mx.imag."""
-    return mx.imag(self, *args, **kwargs)
-
-
-if not hasattr(mx.array, "imag"):
-    mx.array.imag = _array_imag
-
-
 def _array_isfinite(self, *args, **kwargs):
     """Internal wrapper for mx.isfinite."""
     return mx.isfinite(self, *args, **kwargs)
@@ -309,15 +300,6 @@ def _array_radians(self, *args, **kwargs):
 
 if not hasattr(mx.array, "radians"):
     mx.array.radians = _array_radians
-
-
-def _array_real(self, *args, **kwargs):
-    """Internal wrapper for mx.real."""
-    return mx.real(self, *args, **kwargs)
-
-
-if not hasattr(mx.array, "real"):
-    mx.array.real = _array_real
 
 
 def _array_sigmoid(self, *args, **kwargs):

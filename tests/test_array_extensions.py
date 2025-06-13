@@ -672,3 +672,10 @@ def test_permute():
     a = mx.random.normal((2, 3))
     a = a.t()
     assert a.shape == (3, 2)
+
+
+def test_norm():
+    a = mx.random.normal((2, 3))
+    assert mx.array_equal(a.norm(), mx.linalg.norm(a))
+    a = mx.random.normal((2, 3), dtype=mx.complex64)
+    assert mx.array_equal(a.norm(), mx.linalg.norm(a))

@@ -661,3 +661,10 @@ def test_norm():
     assert mx.array_equal(a.norm(), mx.linalg.norm(a))
     a = mx.random.normal((2, 3), dtype=mx.complex64)
     assert mx.array_equal(a.norm(), mx.linalg.norm(a))
+
+
+def test_numpy():
+    import numpy as np
+
+    a = mx.random.normal((2, 3))
+    assert np.allclose(a.numpy(), np.array(a))

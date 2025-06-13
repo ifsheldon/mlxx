@@ -177,10 +177,16 @@ wheels = [
 
 [[package]]
 name = "mlxx"
-version = "0.3.0"
+version = "0.3.1"
 source = { editable = "." }
 dependencies = [
     { name = "mlx" },
+]
+
+[package.optional-dependencies]
+numpy = [
+    { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "numpy", version = "2.3.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
 ]
 
 [package.dev-dependencies]
@@ -195,7 +201,11 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "mlx", specifier = ">=0.26.0" }]
+requires-dist = [
+    { name = "mlx", specifier = ">=0.26.0" },
+    { name = "numpy", marker = "extra == 'numpy'", specifier = ">=2" },
+]
+provides-extras = ["numpy"]
 
 [package.metadata.requires-dev]
 dev = [

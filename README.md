@@ -90,6 +90,7 @@ print(a.add(c))
 - `stop_gradient()`: Stop gradient computation
 - `permute(*axes)`: Permute axes (alias for transpose)
 - `t()`: Transpose (alias for transpose)
+- `numpy()`: Convert `mlx.core.array` to a `numpy.ndarray`
 
 Note: All methods support an optional `stream` parameter for controlling computation streams where applicable.
 

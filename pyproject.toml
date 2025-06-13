@@ -1,6 +1,6 @@
 [project]
 name = "mlxx"
-version = "0.3.0"
+version = "0.3.1"
 description = "MLX array supercharged"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -12,6 +12,9 @@ keywords = ["mlx", "deep learning"]
 [project.urls]
 Repository = "https://github.com/ifsheldon/mlxx"
 Issues = "https://github.com/ifsheldon/mlxx/issues"
+
+[project.optional-dependencies]
+numpy = ["numpy>=2"]
 
 
 [dependency-groups]

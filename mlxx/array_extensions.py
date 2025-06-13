@@ -456,3 +456,14 @@ def _array_norm(self, *args, **kwargs):
 
 if not hasattr(mx.array, "norm"):
     mx.array.norm = _array_norm
+
+
+def _array_numpy(self, copy: bool = True):
+    """Internal wrapper for numpy.array."""
+    import numpy as np
+
+    return np.array(self, copy=copy)
+
+
+if not hasattr(mx.array, "numpy"):
+    mx.array.numpy = _array_numpy

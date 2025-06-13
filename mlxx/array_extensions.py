@@ -468,8 +468,8 @@ if not hasattr(mx.array, "div"):
 
 
 def _array_norm(self, *args, **kwargs):
-    """Internal wrapper for mx.norm."""
-    return mx.norm(self, *args, **kwargs)
+    """Internal wrapper for mx.linalg.norm."""
+    return mx.linalg.norm(self, *args, **kwargs)
 
 
 if not hasattr(mx.array, "norm"):

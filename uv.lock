@@ -47,6 +47,18 @@ wheels = [
 ]
 
 [[package]]
+name = "fastcore"
+version = "1.8.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "packaging" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/27/00/171ff9f67859b2daf34d11a60bf596d9b22921f41c1b0eb9ea267baf6ed6/fastcore-1.8.2.tar.gz", hash = "sha256:8d50abd09b4d484589488dab7d78594d681de3466a84d2d1beb8b6db0d0c00b7", size = 75441, upload-time = "2025-05-09T02:46:21.44Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/54/56/5ea99d5057146e273c90175e7fb40e52b803739c961e50a1dd0fe2dfa645/fastcore-1.8.2-py3-none-any.whl", hash = "sha256:8e66134d9acc411ffdddde64e080e46814e24011c6368b5c9d50165ee8140e8b", size = 78180, upload-time = "2025-05-09T02:46:19.323Z" },
+]
+
+[[package]]
 name = "filelock"
 version = "3.18.0"
 source = { registry = "https://pypi.org/simple" }
@@ -177,9 +189,10 @@ wheels = [
 
 [[package]]
 name = "mlxx"
-version = "0.3.1"
+version = "0.3.2"
 source = { editable = "." }
 dependencies = [
+    { name = "fastcore" },
     { name = "mlx" },
 ]
 
@@ -202,6 +215,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "fastcore", specifier = ">=1.8.2" },
     { name = "mlx", specifier = ">=0.26.0" },
     { name = "numpy", marker = "extra == 'numpy'", specifier = ">=2" },
 ]

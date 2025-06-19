@@ -1,10 +1,13 @@
 [project]
 name = "mlxx"
-version = "0.3.1"
+version = "0.3.2"
 description = "MLX array supercharged"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = ["mlx>=0.26.0"]
+dependencies = [
+    "fastcore>=1.8.2",
+    "mlx>=0.26.0",
+]
 authors = [{ name = "ifsheldon", email = "feng.liang@kaust.edu.sa" }]
 license.file = "LICENSE"
 keywords = ["mlx", "deep learning"]
